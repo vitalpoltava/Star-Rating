@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stars Rating Directive</title>
+</head>
+<body>
+<style>
+    canvas.star {
+        float: left;
+        z-index: 1;
+    }
+
+    .stars {
+        visibility: hidden;
+        display: inline-block;
+        position: relative;
+        z-index: 0;
+    }
+
+    .stars-selected {
+        position: absolute;
+        height: 100%;
+        z-index: -1;
+    }
+</style>
+<div id="main" ng-app="stars">
+    <div eo-rating stars="5"  rating-stars="3.5" star-radius="30" sel-color="gold" back-color="white"></div>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
+<script>
+    (function(){
+        var rating = angular.module('stars', []);
+
+        rating.factory('stars', [function() {
+
+            /**
+             * Draw wrapping rectangle
+             *
+             * @param ctx {Object} 2d context
+             * @param dim {Number}
+             * @param backColor {String}
+             */
+            function _drawRect(ctx, dim, backColor) {
+                if (!ctx) throw Error('No Canvas context found!');
+                ctx.save();
+                ctx.width = dim;
+                ctx.height = dim;
+                ctx.fillStyle = backColor;
+                ctx.fillRect(0,0, dim, dim);
+                ctx.restore();
+            }
+
+            /**
+             * Draw one star with certain general params
+             *
+             * @param empty {Boolean} Draw transparent or filled star
+             * @param ctx {Object} 2d context
+             * @param x {Number}
+             * @param y {Number}
+             * @param r {Number}
+             * @param p {Number}
+             * @param m {Number}
+             * @param style {String} Star background color (in case of filled star)
+             * @private
+             */
+            function _star(empty, ctx, x, y, r, p, m, style) {
+                if (!ctx) throw Error('No Canvas context found!');
+                ctx.save();
+
+                if (empty) {
+                    ctx.globalCompositeOperation = 'destination-out';
+                } else {
+                    ctx.fillStyle = style || 'gold';
+                }
+
+                ctx.beginPath();
+                ctx.translate(x, y);
+                ctx.moveTo(0,0-r);
+                for (var i = 0; i < p; i++)
+                {
+                    ctx.rotate(Math.PI / p);
+                    ctx.lineTo(0, 0 - (r*m));
+                    ctx.rotate(Math.PI / p);
+                    ctx.lineTo(0, 0 - r);
+                }
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // Draw one empty star
+            function emptyStar(ctx, r, rectBackColor) {
+                _drawRect(ctx, r*2, rectBackColor);
+                _star(true, ctx, r, r, r, 5, 0.5);
+            }
+
+            // Draw one filled star
+            function filledStar(ctx, r, rectBackColor, style) {
+                _drawRect(ctx, r*2, rectBackColor);
+                _star(false, ctx, r, r, r, 5, 0.5, style);
+            }
+
+            // Current API
+            return {
+                emptyStar: emptyStar
+            }
+        }]);
+
+        rating.factory('starsUtility', [function() {
+            /**
+             * Creates an array with index values
+             *
+             * @param n {Number}
+             * @returns {Array}
+             */
+            var createRange = function(n) {
+                var i = 0;
+                var range = new Array(n);
+                while(i < n) {
+                    range[i++] = i;
+                }
+                return range;
+            };
+
+            /**
+             * Calculate percent of area to filled with color star
+             *
+             * @param attrs {Object}
+             * @returns {Number}
+             */
+            var calculatePercent = function(attrs) {
+                var percent, stars, selectedStars;
+                if (!attrs) {
+                    return 0;
+                } else if (attrs.ratingPercent) {
+                    percent = parseInt(attrs.ratingPercent) ? parseInt(attrs.ratingPercent) : 0;
+                    return percent > 100 ? 100 : percent;
+                } else if (attrs.ratingStars) {
+                    stars = parseInt(attrs.stars || 5);
+                    selectedStars = parseFloat(attrs.ratingStars) > stars ? stars : parseFloat(attrs.ratingStars);
+                    return (100 / stars) * selectedStars || 0.0;
+                }
+            };
+
+            return {
+                createRange: createRange,
+                calculatePercent: calculatePercent
+            };
+        }]);
+
+        rating.directive('eoRating', ['$compile', '$templateCache', '$timeout', function($compile, $templateCache, $timeout) {
+            return {
+                restrict: 'A',
+                template: '<div class="stars" style="background-color: {{emptyBackColor}}"><div class="stars-selected" style="width: {{percent}}%; background-color: {{selColor}};"></div></div>',
+                controller: function($scope, stars, starsUtility) {
+
+                    // Invoke the factory method: draw transparent star
+                    $scope.drawStar = function() {
+                        return stars.emptyStar.apply(null, arguments);
+                    };
+
+                    // Apply service method: create pre-filled array
+                    $scope.createRange = function() {
+                        return starsUtility.createRange.apply(null, arguments);
+                    };
+
+                    // Apply service method: calculate fill percent
+                    $scope.calculatePercent = function() {
+                        return starsUtility.calculatePercent.apply(null, arguments);
+                    };
+
+                },
+                link: function($scope, el, attrs) {
+                    // Configs
+                    var starEl = [];
+                    var wrapper = angular.element(el[0].querySelector('.stars'));
+                    $scope.howManyStars = $scope.createRange( attrs.stars ) || [1, 2, 3, 4, 5];
+                    $scope.starRadius = parseInt( attrs.starRadius ) || 20;
+                    $scope.percent = $scope.calculatePercent( attrs );
+                    $scope.backColor = attrs.backColor || 'white';
+                    $scope.emptyBackColor = attrs.emptyBackColor || '#d3d3d3';
+                    $scope.selColor = attrs.selColor || 'gold';
+
+                    // add canvas to DOM first
+                    $scope.howManyStars.forEach(function() {
+                        var star = angular.element('<canvas class="star" height="{{starRadius*2}}" width="{{starRadius*2}}"></canvas>');
+                        $compile(star)($scope);
+                        wrapper.append(star);
+                        starEl.push(star);
+                    });
+
+                    // we should wait for next JS 'tick' to show up the stars
+                    $timeout(function() {
+                        starEl.forEach(function(el) {
+                            $scope.drawStar(el[0].getContext("2d"), $scope.starRadius, $scope.backColor);
+                        });
+                        wrapper.css('visibility', 'visible'); // this to avoid to show partly rendered layout
+                    });
+
+                }
+            };
+        }]);
+    }());
+</script>
+</body>
+</html>
