@@ -19,12 +19,14 @@
 
     .stars-selected {
         position: absolute;
+        max-width: 100%;
         height: 100%;
         z-index: -1;
     }
 </style>
 <div id="main" ng-app="stars">
-    <div star-rating stars="5"  rating-stars="3.5" star-radius="30" sel-color="gold" back-color="white"></div>
+    <div star-rating stars="5" rating-define="percent" rating-stars="3.5" star-radius="30" sel-color="gold" back-color="white"></div>
+    <div>{{percent}}%</div>
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
@@ -142,9 +144,25 @@
                 }
             };
 
+            /**
+             * Calculate how many stars should be filled (in percent)
+             *
+             * @param totalStars
+             * @param totalWidth
+             * @param starWidth
+             * @param width
+             * @returns {number}
+             */
+            var percentFullStars = function(totalStars, totalWidth, starWidth, width) {
+                var pxPerOneStar = totalWidth / totalStars;
+                var percentPerOneStar = 100 / totalStars;
+                return Math.ceil(width / pxPerOneStar) * percentPerOneStar;
+            };
+
             return {
                 createRange: createRange,
-                calculatePercent: calculatePercent
+                calculatePercent: calculatePercent,
+                percentFullStars: percentFullStars
             };
         }]);
 
@@ -169,17 +187,52 @@
                         return starsUtility.calculatePercent.apply(null, arguments);
                     };
 
+                    // Apply service method: calculate how many full stars should be filled
+                    $scope.percentFullStars = function() {
+                        return starsUtility.percentFullStars.apply(null, arguments);
+                    };
+
                 },
                 link: function($scope, el, attrs) {
                     // Configs
                     var starEl = [];
                     var wrapper = angular.element(el[0].querySelector('.stars'));
-                    $scope.howManyStars = $scope.createRange( attrs.stars ) || [1, 2, 3, 4, 5];
+                    var filler = angular.element(el[0].querySelector('.stars-selected'));
+                    $scope.howManyStars = $scope.createRange( attrs.stars ) || $scope.createRange(5);
                     $scope.starRadius = parseInt( attrs.starRadius ) || 20;
-                    $scope.percent = $scope.calculatePercent( attrs );
+                    $scope.percent = $scope.prevPercent = $scope.calculatePercent( attrs );
                     $scope.backColor = attrs.backColor || 'white';
                     $scope.emptyBackColor = attrs.emptyBackColor || '#d3d3d3';
                     $scope.selColor = attrs.selColor || 'gold';
+                    $scope.ratingDefine = attrs.ratingDefine || 'percent';
+
+                    // Allow to define rating?
+                    // -----------------------
+                    if ($scope.ratingDefine) {
+
+                        // watch percent value to update the view
+                        $scope.$watch('percent', function(newValue, oldValue) {
+                            filler.css('width', newValue + '%');
+                        });
+
+                        // attach events to change the rating
+                        wrapper.on('mousemove', function(e) {
+                            var w = wrapper[0].offsetWidth;
+                            var newPercent = $scope.ratingDefine == 'star' ? $scope.percentFullStars($scope.howManyStars.length, w, $scope.starRadius*2, e.clientX) : Math.floor((e.clientX * 100) / w);
+                            $scope.percent = newPercent > 100 ? 100 : newPercent;
+                            $scope.$digest();
+                        })
+
+                        .on('click', function(e) {
+                            $scope.prevPercent = $scope.percent;
+                        })
+
+                        .on('mouseout', function(e) {
+                            //if ($scope.initNewValue)
+                            $scope.percent = $scope.prevPercent;
+                            $scope.$digest();
+                        });
+                    }
 
                     // add canvas to DOM first
                     $scope.howManyStars.forEach(function() {
