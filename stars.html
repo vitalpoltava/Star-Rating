@@ -169,7 +169,7 @@
         rating.directive('starRating', ['$compile', '$templateCache', '$timeout', function($compile, $templateCache, $timeout) {
             return {
                 restrict: 'A',
-                template: '<div class="stars" style="background-color: {{emptyBackColor}}"><div class="stars-selected" style="width: {{percent}}%; background-color: {{selColor}};"></div></div>',
+                template: '<div class="stars" ng-mousemove="changeRating($event)" ng-mouseleave="leaveRating()" style="background-color: {{emptyBackColor}}"><div class="stars-selected" style="width: {{percent}}%; background-color: {{selColor}};"></div></div>',
                 controller: function($scope, stars, starsUtility) {
 
                     // Invoke the factory method: draw transparent star
@@ -206,8 +206,8 @@
                     $scope.selColor = attrs.selColor || 'gold';
                     $scope.ratingDefine = attrs.ratingDefine || 'percent';
 
-                    // Allow to define rating?
-                    // -----------------------
+                    // Allowed to define a new rating?
+                    // -------------------------------
                     if ($scope.ratingDefine) {
 
                         // watch percent value to update the view
@@ -215,18 +215,18 @@
                             filler.css('width', newValue + '%');
                         });
 
-                        // attach events to change the rating
-                        wrapper.on('mousemove', function(e) {
+                        // handle events to change the rating
+                        $scope.changeRating = function(e) {
                             var w = wrapper[0].offsetWidth;
                             var newPercent = $scope.ratingDefine == 'star' ? $scope.percentFullStars($scope.howManyStars.length, w, $scope.starRadius*2, e.clientX) : Math.floor((e.clientX * 100) / w);
                             $scope.percent = newPercent > 100 ? 100 : newPercent;
                             $scope.$digest();
-                        })
+                        };
 
-                        .on('mouseout', function(e) {
+                        $scope.leaveRating = function() {
                             $scope.percent = $scope.prevPercent;
                             $scope.$digest();
-                        });
+                        };
 
                         $scope.secureNewRating = function() {
                             $scope.prevPercent = $scope.percent;
