@@ -1,4 +1,4 @@
-Need to show a Stars rating with floating numbers?
+Need to show a Stars rating with floating numbers (like to show `2.5` stars)?
 Use this `AngularJS` directive! :)
 
 In a file `stars.html` you'll find a working example of using `AngularJS` and `canvas` awesomeness. With said directive you can:
