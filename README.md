@@ -10,4 +10,4 @@ In a file `stars.html` you'll find a working example of using `AngularJS` and `c
 
 Wishing to change the rating live?
 
-5. You can use the `rating-define` attribute to make the directive to change the rating, depending on mouse moves (`percent` value by percent and `star` value to change by full star). 
+5. You can use the `rating-define` attribute to make the directive to change the rating, depending on mouse moves (`percent` value by percent and `star` value to change by full star). The `click` will "secure" the new rating.
