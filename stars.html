@@ -223,19 +223,19 @@
                             $scope.$digest();
                         })
 
-                        .on('click', function(e) {
-                            $scope.prevPercent = $scope.percent;
-                        })
-
                         .on('mouseout', function(e) {
                             $scope.percent = $scope.prevPercent;
                             $scope.$digest();
                         });
+
+                        $scope.secureNewRating = function() {
+                            $scope.prevPercent = $scope.percent;
+                        };
                     }
 
                     // add canvas to DOM first
                     $scope.howManyStars.forEach(function() {
-                        var star = angular.element('<canvas class="star" height="{{starRadius*2}}" width="{{starRadius*2}}"></canvas>');
+                        var star = angular.element('<canvas class="star" ng-click="secureNewRating()" height="{{starRadius*2}}" width="{{starRadius*2}}"></canvas>');
                         $compile(star)($scope);
                         wrapper.append(star);
                         starEl.push(star);
