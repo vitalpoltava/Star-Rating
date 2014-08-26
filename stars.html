@@ -25,8 +25,9 @@
     }
 </style>
 <div id="main" ng-app="stars">
-    <div star-rating stars="5" rating-define="percent" rating-stars="3.5" star-radius="30" sel-color="gold" back-color="white"></div>
-    <div><span ng-bind="percent"></span>%</div>
+    <div star-rating stars="5" outer-star-selection="stars" outer-percent="rating" rating-define="percent" rating-percent="35" star-radius="30" sel-color="gold" back-color="white"></div>
+    <div><span ng-bind="rating"></span>%</div>
+    <div><span ng-bind="stars"></span>&nbsp;stars</div>
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
@@ -159,37 +160,50 @@
                 return Math.ceil(width / pxPerOneStar) * percentPerOneStar;
             };
 
+            /**
+             * Calculate stars in percents
+             *
+             * @param totalStars
+             * @param percent
+             * @param precision
+             * @returns {string}
+             */
+            var starsByPercent = function(totalStars, percent, precision) {
+                var percentPerOneStar = 100 / totalStars;
+                return (percent / percentPerOneStar).toFixed(precision || 2);
+            };
+
             return {
                 createRange: createRange,
                 calculatePercent: calculatePercent,
-                percentFullStars: percentFullStars
+                percentFullStars: percentFullStars,
+                starsByPercent: starsByPercent
             };
         }]);
 
+        // ------------------------
+        //        DIRECTIVE
+        // ------------------------
         rating.directive('starRating', ['$compile', '$templateCache', '$timeout', function($compile, $templateCache, $timeout) {
             return {
                 restrict: 'A',
+                scope: {
+                    percent: "=outerPercent",
+                    starsSelected: "=outerStarSelection"
+                },
                 template: '<div class="stars" ng-mousemove="changeRating($event)" ng-mouseleave="leaveRating()" style="background-color: {{emptyBackColor}}"><div class="stars-selected" style="width: {{percent}}%; background-color: {{selColor}};"></div></div>',
                 controller: function($scope, stars, starsUtility) {
+
+                    // Apply Utilities
+                    for(var method in starsUtility) {
+                        (function(m) {
+                            $scope[m] = function() { return starsUtility[m].apply(null, arguments); };
+                        }(method));
+                    }
 
                     // Invoke the factory method: draw transparent star
                     $scope.drawStar = function() {
                         return stars.emptyStar.apply(null, arguments);
-                    };
-
-                    // Apply service method: create pre-filled array
-                    $scope.createRange = function() {
-                        return starsUtility.createRange.apply(null, arguments);
-                    };
-
-                    // Apply service method: calculate fill percent
-                    $scope.calculatePercent = function() {
-                        return starsUtility.calculatePercent.apply(null, arguments);
-                    };
-
-                    // Apply service method: calculate how many full stars should be filled
-                    $scope.percentFullStars = function() {
-                        return starsUtility.percentFullStars.apply(null, arguments);
                     };
 
                 },
@@ -198,6 +212,7 @@
                     var starEl = [];
                     var wrapper = angular.element(el[0].querySelector('.stars'));
                     var filler = angular.element(el[0].querySelector('.stars-selected'));
+
                     $scope.howManyStars = $scope.createRange( attrs.stars ) || $scope.createRange(5);
                     $scope.starRadius = parseInt( attrs.starRadius ) || 20;
                     $scope.percent = $scope.prevPercent = $scope.calculatePercent( attrs );
@@ -213,6 +228,7 @@
                         // watch percent value to update the view
                         $scope.$watch('percent', function(newValue, oldValue) {
                             filler.css('width', newValue + '%');
+                            $scope.starsSelected = $scope.starsByPercent($scope.howManyStars.length, $scope.percent);
                         });
 
                         // handle events to change the rating
