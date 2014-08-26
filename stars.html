@@ -26,7 +26,7 @@
 </style>
 <div id="main" ng-app="stars">
     <div star-rating stars="5" rating-define="percent" rating-stars="3.5" star-radius="30" sel-color="gold" back-color="white"></div>
-    <div>{{percent}}%</div>
+    <div><span ng-bind="percent"></span>%</div>
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
@@ -220,12 +220,10 @@
                             var w = wrapper[0].offsetWidth;
                             var newPercent = $scope.ratingDefine == 'star' ? $scope.percentFullStars($scope.howManyStars.length, w, $scope.starRadius*2, e.clientX) : Math.floor((e.clientX * 100) / w);
                             $scope.percent = newPercent > 100 ? 100 : newPercent;
-                            $scope.$digest();
                         };
 
                         $scope.leaveRating = function() {
                             $scope.percent = $scope.prevPercent;
-                            $scope.$digest();
                         };
 
                         $scope.secureNewRating = function() {
