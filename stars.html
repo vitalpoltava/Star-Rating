@@ -3,7 +3,7 @@
 <head>
     <title>Stars Rating Directive</title>
 </head>
-<body>
+<body style="text-align: center;">
 <style>
     canvas.star {
         float: left;
@@ -233,8 +233,10 @@
 
                         // handle events to change the rating
                         $scope.changeRating = function(e) {
-                            var w = wrapper[0].offsetWidth;
-                            var newPercent = $scope.ratingDefine == 'star' ? $scope.percentFullStars($scope.howManyStars.length, w, $scope.starRadius*2, e.clientX) : Math.floor((e.clientX * 100) / w);
+                            var el = wrapper[0];
+                            var w = el.offsetWidth;
+                            var selected = e.clientX - el.getBoundingClientRect().left;
+                            var newPercent = $scope.ratingDefine == 'star' ? $scope.percentFullStars($scope.howManyStars.length, w, $scope.starRadius*2, selected) : Math.floor((selected * 100) / w);
                             $scope.percent = newPercent > 100 ? 100 : newPercent;
                         };
 
