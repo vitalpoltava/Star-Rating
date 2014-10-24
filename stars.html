@@ -28,6 +28,7 @@
     <div star-rating stars="5" outer-star-selection="stars" outer-percent="rating" rating-define="percent" rating-percent="35" star-radius="30" sel-color="gold" back-color="white"></div>
     <div><span ng-bind="rating"></span>%</div>
     <div><span ng-bind="stars"></span>&nbsp;stars</div>
+
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
@@ -219,7 +220,7 @@
                     $scope.backColor = attrs.backColor || 'white';
                     $scope.emptyBackColor = attrs.emptyBackColor || '#d3d3d3';
                     $scope.selColor = attrs.selColor || 'gold';
-                    $scope.ratingDefine = attrs.ratingDefine || 'percent';
+                    $scope.ratingDefine = attrs.ratingDefine || false;
 
                     // Allowed to define a new rating?
                     // -------------------------------
