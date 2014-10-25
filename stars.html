@@ -25,15 +25,22 @@
     }
 </style>
 <div id="main" ng-app="stars">
-    <div star-rating stars="5" outer-star-selection="stars" outer-percent="rating" rating-define="percent" rating-percent="35" star-radius="30" sel-color="gold" back-color="white"></div>
+    <div star-rating stars="5" outer-star-selection="stars" outer-percent="rating" rating-define="percent" rating-percent="100" star-radius="30" sel-color="gold" back-color="white"></div>
     <div><span ng-bind="rating"></span>%</div>
     <div><span ng-bind="stars"></span>&nbsp;stars</div>
 
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
-<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
 <script>
-    (function(){
+    /**
+     * Variable Star Rating
+     *
+     * ver 0.2.0
+     *
+     * (c) Vitalii Omelkin
+     *
+     */
+    ;(function(){
         var rating = angular.module('stars', []);
 
         rating.factory('stars', [function() {
@@ -236,7 +243,7 @@
                         $scope.changeRating = function(e) {
                             var el = wrapper[0];
                             var w = el.offsetWidth;
-                            var selected = e.clientX - el.getBoundingClientRect().left;
+                            var selected = e.clientX - el.getBoundingClientRect().left + 1;
                             var newPercent = $scope.ratingDefine == 'star' ? $scope.percentFullStars($scope.howManyStars.length, w, $scope.starRadius*2, selected) : Math.floor((selected * 100) / w);
                             $scope.percent = newPercent > 100 ? 100 : newPercent;
                         };
