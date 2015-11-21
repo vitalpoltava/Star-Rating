@@ -1,6 +1,8 @@
 Need to show a Stars rating with floating numbers (like to show `2.5` stars)?
 Use this `AngularJS` directive! :)
 
+![Screenshot](./screenshot.png?raw=true)
+
 In a file `stars.html` you'll find a working example of using `AngularJS` and `canvas` awesomeness. With said directive you can:
 
 1. Define the stars size -- attribute `star-radius`;
