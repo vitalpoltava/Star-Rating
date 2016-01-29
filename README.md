@@ -14,5 +14,5 @@ Wishing to change the rating live?
 
 5. You can use the `rating-define` attribute to make the directive to change the rating, depending on mouse moves (`percent` value by percent and `star` value to change by full star). The `click` will "secure" the new rating.
 
-`N.B.` If you want to use several ratings on one page, please wrap each of them into separate `controller` (to have the scope properties isolated and not to interfere each other).
+`N.B.` If you want to use several ratings on one page, please wrap each of them into separate `controller` or isolate them other way in order not to interfere each other...
 
