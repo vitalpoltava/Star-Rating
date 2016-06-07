@@ -200,7 +200,13 @@
                     percent: "=outerPercent",
                     starsSelected: "=outerStarSelection"
                 },
-                template: '<div class="stars" ng-mousemove="changeRating($event)" ng-mouseleave="leaveRating()" style="background-color: {{emptyBackColor}}"><div class="stars-selected" style="width: {{percent}}%; background-color: {{selColor}};"></div></div>',
+                template: function(element, attrs){
+    				if(attrs.readonly === false)
+    					var tempHtml = '<div class="stars" ng-mousemove="changeRating($event)" ng-mouseleave="leaveRating()" style="background-color: {{emptyBackColor}}"><div class="stars-selected" style="width: {{percent}}%; background-color: {{selColor}};"></div></div>';
+    				else
+    					var tempHtml = '<div class="stars" style="background-color: {{emptyBackColor}}"><div class="stars-selected" style="width: {{percent}}%; background-color: {{selColor}};"></div></div>';
+    				return tempHtml;
+    			},
                 controller: function($scope, stars, starsUtility) {
 
                     // Apply Utilities
@@ -229,6 +235,7 @@
                     $scope.emptyBackColor = attrs.emptyBackColor || '#d3d3d3';
                     $scope.selColor = attrs.selColor || 'gold';
                     $scope.ratingDefine = attrs.ratingDefine || false;
+                    $scope.readonly = attrs.readonly || false;
 
                     // Allowed to define a new rating?
                     // -------------------------------
