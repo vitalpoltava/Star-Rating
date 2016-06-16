@@ -1,4 +1,4 @@
-Need to show a Stars rating with floating numbers (like to show `3.5` stars)?
+Need to show a Stars rating with floating numbers (like to show `4.5` stars)?
 Use this `AngularJS` directive! :)
 
 ![Screenshot](./screenshot.png?raw=true)
