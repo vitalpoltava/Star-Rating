@@ -10,6 +10,11 @@
 ;(function(){
     var rating = angular.module('stars', []);
 
+    /**
+     * Demo controllers
+     * ----------------
+     */
+
     rating.controller("starsController", function ($scope) {
         // Default graphic items -- stars
     });
@@ -26,6 +31,12 @@
             ctx.restore();
         }
     });
+
+
+    /**
+     * Core functionality
+     * ------------------
+     */
 
     rating.factory('stars', [function() {
 
