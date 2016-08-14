@@ -6,9 +6,17 @@
 </head>
 <body style="text-align: center;">
 <div id="main" ng-app="stars">
-    <div star-rating stars="5" outer-star-selection="stars" outer-percent="rating" rating-define="percent" rating-percent="50" star-radius="30" sel-color="gold" back-color="white"></div>
-    <div><span ng-bind="rating"></span>%</div>
-    <div><span ng-bind="stars"></span>&nbsp;stars</div>
+    <div ng-controller="starsController as starCtrl">
+        <div star-rating stars="5" outer-star-selection="stars" outer-percent="rating" rating-define="percent" rating-percent="50" star-radius="30" sel-color="gold" back-color="white"></div>
+        <div><span ng-bind="rating"></span>%</div>
+        <div><span ng-bind="stars"></span>&nbsp;stars</div>
+    </div>
+    <br><br>
+    <div ng-controller="circlesController as circleCtrl">
+        <div star-rating stars="5" custom-figure-drawer="circleDrawer" outer-star-selection="stars" outer-percent="rating" rating-define="percent" rating-percent="70" star-radius="25" sel-color="gold" back-color="white"></div>
+        <div><span ng-bind="rating"></span>%</div>
+        <div><span ng-bind="stars"></span>&nbsp;stars</div>
+    </div>
 
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>

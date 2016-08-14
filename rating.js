@@ -1,7 +1,7 @@
 /**
  * Variable Star Rating
  *
- * ver 0.2.1
+ * ver 0.3.0
  *
  * (c) Vitalii Omelkin, 2015, 2016
  * Licensed under the MIT License
@@ -9,6 +9,23 @@
  */
 ;(function(){
     var rating = angular.module('stars', []);
+
+    rating.controller("starsController", function ($scope) {
+        // Default graphic items -- stars
+    });
+
+    rating.controller("circlesController", function ($scope) {
+        // Circle graphic items function
+        $scope.circleDrawer = function (ctx, r) {
+            if (!ctx) throw Error('No Canvas context found!');
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(r, r, r, 0, 2 * Math.PI, false);
+            ctx.fill();
+            ctx.restore();
+        }
+    });
 
     rating.factory('stars', [function() {
 
@@ -55,8 +72,7 @@
             ctx.beginPath();
             ctx.translate(x, y);
             ctx.moveTo(0,0-r);
-            for (var i = 0; i < p; i++)
-            {
+            for (var i = 0; i < p; i++) {
                 ctx.rotate(Math.PI / p);
                 ctx.lineTo(0, 0 - (r*m));
                 ctx.rotate(Math.PI / p);
@@ -69,7 +85,6 @@
         // Draw one empty star
         function drawRatingElement(ctx, r, rectBackColor, ratingElDrawerFunc) {
             _drawRect(ctx, r*2, rectBackColor);
-            
             if (typeof ratingElDrawerFunc === 'function') {
                 ratingElDrawerFunc(ctx, r); // draw custom figure
             } else {
@@ -164,7 +179,8 @@
             restrict: 'A',
             scope: {
                 percent: "=outerPercent",
-                starsSelected: "=outerStarSelection"
+                starsSelected: "=outerStarSelection",
+                customFigureDrawer: "="
             },
             template: '<div class="stars" ng-mousemove="changeRating($event)" ng-mouseleave="leaveRating()" ng-style="{\'background-color\': emptyBackColor}"><div class="stars-selected" ng-style="{\'width\': percent + \'%\', \'background-color\': selColor}"></div></div>',
             controller: function($scope, stars, starsUtility) {
@@ -195,7 +211,6 @@
                 $scope.emptyBackColor = attrs.emptyBackColor || '#d3d3d3';
                 $scope.selColor = attrs.selColor || 'gold';
                 $scope.ratingDefine = attrs.ratingDefine || false;
-                $scope.customFigureDrawer = attrs.customFigureDrawer || false;
 
                 // Allowed to define a new rating?
                 // -------------------------------
