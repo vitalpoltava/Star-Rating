@@ -1,7 +1,7 @@
 /**
  * Variable Star Rating
  *
- * ver 0.3.0
+ * ver 0.3.1
  *
  * (c) Vitalii Omelkin, 2015, 2016
  * Licensed under the MIT License
@@ -38,7 +38,8 @@
      * ------------------
      */
 
-    rating.factory('stars', [function() {
+    // @ngInject
+    rating.factory('stars', function() {
 
         /**
          * Draw wrapping rectangle
@@ -108,9 +109,10 @@
         return {
             drawRatingElement: drawRatingElement
         }
-    }]);
+    });
 
-    rating.factory('starsUtility', [function() {
+    // @ngInject
+    rating.factory('starsUtility', function() {
         /**
          * Creates an array with index values
          *
@@ -180,12 +182,13 @@
             percentFullStars: percentFullStars,
             starsByPercent: starsByPercent
         };
-    }]);
+    });
 
     // ------------------------
     //        DIRECTIVE
     // ------------------------
-    rating.directive('starRating', ['$compile', '$templateCache', '$timeout', function($compile, $templateCache, $timeout) {
+    // @ngInject
+    rating.directive('starRating', function($compile, $templateCache, $timeout) {
         return {
             restrict: 'A',
             scope: {
@@ -269,5 +272,5 @@
 
             }
         };
-    }]);
+    });
 }());
