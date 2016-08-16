@@ -194,7 +194,7 @@
             scope: {
                 percent: "=outerPercent",
                 starsSelected: "=outerStarSelection",
-                customFigureDrawer: "="
+                customFigureDrawer: "=?"
             },
             template: '<div class="stars" ng-mousemove="changeRating($event)" ng-mouseleave="leaveRating()" ng-style="{\'background-color\': emptyBackColor}"><div class="stars-selected" ng-style="{\'width\': percent + \'%\', \'background-color\': selColor}"></div></div>',
             controller: function($scope, stars, starsUtility) {
