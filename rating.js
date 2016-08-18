@@ -1,7 +1,7 @@
 /**
  * Variable Star Rating
  *
- * ver 0.3.1
+ * ver 0.3.2
  *
  * (c) Vitalii Omelkin, 2015, 2016
  * Licensed under the MIT License
@@ -240,7 +240,7 @@
                     $scope.changeRating = function(e) {
                         var el = wrapper[0];
                         var w = el.offsetWidth;
-                        var selected = e.clientX - el.getBoundingClientRect().left + 1;
+                        var selected = e.clientX - el.getBoundingClientRect().left + 2;
                         var newPercent = $scope.ratingDefine == 'star' ? $scope.percentFullStars($scope.howManyStars.length, w, $scope.starRadius*2, selected) : Math.floor((selected * 100) / w);
                         $scope.percent = newPercent > 100 ? 100 : newPercent;
                     };
