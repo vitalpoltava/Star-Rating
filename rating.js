@@ -72,10 +72,10 @@
 
             ctx.beginPath();
             ctx.translate(r, r);
-            ctx.moveTo(0,0-r);
+            ctx.moveTo(0, 0 - r);
             for (var i = 0; i < 5; i++) {
                 ctx.rotate(Math.PI / 5);
-                ctx.lineTo(0, 0 - (r*0.5));
+                ctx.lineTo(0, 0 - (r * 0.5));
                 ctx.rotate(Math.PI / 5);
                 ctx.lineTo(0, 0 - r);
             }
@@ -85,7 +85,7 @@
 
         // Draw one empty star
         function drawRatingElement(ctx, r, rectBackColor, ratingElDrawerFunc) {
-            _drawRect(ctx, r*2, rectBackColor);
+            _drawRect(ctx, r * 2, rectBackColor);
             if (typeof ratingElDrawerFunc === 'function') {
                 ratingElDrawerFunc(ctx, r); // draw custom rating item
             } else {
