@@ -1,7 +1,7 @@
 /**
  * Variable Star Rating
  *
- * ver 0.3.2
+ * ver 0.3.3
  *
  * (c) Vitalii Omelkin, 2015, 2016
  * Licensed under the MIT License
