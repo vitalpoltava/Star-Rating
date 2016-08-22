@@ -61,33 +61,22 @@
         /**
          * Draw one star with certain general params
          *
-         * @param empty {Boolean} Draw transparent or filled star
          * @param ctx {Object} 2d context
-         * @param x {Number}
-         * @param y {Number}
-         * @param r {Number}
-         * @param p {Number}
-         * @param m {Number}
-         * @param style {String} Star background color (in case of filled star)
+         * @param r {Number} Radius
          * @private
          */
-        function _star(empty, ctx, x, y, r, p, m, style) {
+        function _star(ctx, r) {
             if (!ctx) throw Error('No Canvas context found!');
             ctx.save();
-
-            if (empty) {
-                ctx.globalCompositeOperation = 'destination-out';
-            } else {
-                ctx.fillStyle = style || 'gold';
-            }
+            ctx.globalCompositeOperation = 'destination-out';
 
             ctx.beginPath();
-            ctx.translate(x, y);
+            ctx.translate(r, r);
             ctx.moveTo(0,0-r);
-            for (var i = 0; i < p; i++) {
-                ctx.rotate(Math.PI / p);
-                ctx.lineTo(0, 0 - (r*m));
-                ctx.rotate(Math.PI / p);
+            for (var i = 0; i < 5; i++) {
+                ctx.rotate(Math.PI / 5);
+                ctx.lineTo(0, 0 - (r*0.5));
+                ctx.rotate(Math.PI / 5);
                 ctx.lineTo(0, 0 - r);
             }
             ctx.fill();
@@ -98,14 +87,14 @@
         function drawRatingElement(ctx, r, rectBackColor, ratingElDrawerFunc) {
             _drawRect(ctx, r*2, rectBackColor);
             if (typeof ratingElDrawerFunc === 'function') {
-                ratingElDrawerFunc(ctx, r); // draw custom figure
+                ratingElDrawerFunc(ctx, r); // draw custom rating item
             } else {
-                _star(true, ctx, r, r, r, 5, 0.5); // draw star as a default image
+                _star(ctx, r); // draw star as a default rating item
             }
             
         }
 
-        // Current API
+        // Return API
         return {
             drawRatingElement: drawRatingElement
         }
