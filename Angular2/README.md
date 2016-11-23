@@ -5,7 +5,7 @@ The **Angular2** version of the **Star Rating** application.
 Usage example:
 
 ```javascript
-<stars radius="45" stars="4" stars-selected="2" disabled="true"></stars>
+<stars radius="45" stars="4" stars-selected="2"></stars>
 ```
 
 This will show `4` stars with `2` of them selected. Default configuration will show those in light gray background (for not selected) anf gold for selected.
