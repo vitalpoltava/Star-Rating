@@ -7,7 +7,6 @@ import {Component, ElementRef} from '@angular/core';
             display: inline-block;
             position: relative;
             z-index: 0;
-            background-color: lightgray;
         }
 
         .stars-selected {
@@ -19,6 +18,7 @@ import {Component, ElementRef} from '@angular/core';
     `],
     template: `
         <div class="stars" 
+            [ngStyle]="{'background-color': backColor}"
             (click)="secureNewRating()"
             (mouseleave)="leaveRating()"
             (mousemove)="changeRating($event)">
@@ -34,6 +34,7 @@ export class StarComponent {
     items: number;
     itemsIterable: number[];
     selColor: string;
+    backColor: string;
     securedWidth: string;
     selWidth: string;
     percent: string;
@@ -45,6 +46,7 @@ export class StarComponent {
         const _getAttribute = (el, attr, def) => el.nativeElement.getAttribute(attr) || def;
 
         this.selColor = _getAttribute(el, 'sel-color', 'gold');
+        this.backColor = _getAttribute(el, 'back-color', 'light-gray');
         this.radius = parseInt(_getAttribute(el, 'radius', '30'), 10);
         this.items = parseInt(_getAttribute(el, 'items', '5'), 10);
         this.percent = _getAttribute(el, 'percent', '0') + '%';
