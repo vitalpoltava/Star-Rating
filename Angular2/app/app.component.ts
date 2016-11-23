@@ -2,6 +2,21 @@ import {Component, ElementRef} from '@angular/core';
 
 @Component({
     selector: 'stars',
+    styles: [`
+        .stars {
+            display: inline-block;
+            position: relative;
+            z-index: 0;
+            background-color: lightgray;
+        }
+
+        .stars-selected {
+            position: absolute;
+            max-width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    `],
     template: `
         <div class="stars" 
             (click)="secureNewRating()"
@@ -35,7 +50,7 @@ export class StarComponent {
         this.starsSelected = parseFloat(_getAttribute(el, 'stars-selected')) || 0;
 
         this.itemsIterable = new Array(this.items);
-        this.securedWidth = this.starsSelected ? 100/this.items*this.starsSelected + '%' : this.percent;
+        this.securedWidth = this.starsSelected ? 100 / this.items * this.starsSelected + '%' : this.percent;
         this.el = el;
 
         // initial setup
@@ -59,6 +74,12 @@ export class StarComponent {
 @Component({
     selector: 'star-item',
     inputs: ['radius'],
+    styles: [`
+        canvas.star {
+            float: left;
+            z-index: 1;
+        }       
+    `],
     template: `
         <canvas 
             class="star" 
