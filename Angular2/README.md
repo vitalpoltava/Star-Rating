@@ -1,4 +1,5 @@
 ![Logo](https://angular.io/resources/images/logos/standard/logo-nav.png)
+
 The **Angular2** version of the Star Rating application.
 
 Usage example:
