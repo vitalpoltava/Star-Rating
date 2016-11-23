@@ -6,7 +6,7 @@ Usage example:
 <stars radius="45" stars="4" stars-selected="2" disabled="true"></stars>
 ```
 
-This will show 4 stars with 2 of them selected. Default configuration will show those in light gray background (for not selected) anf gold for selected.
+This will show `4` stars with `2` of them selected. Default configuration will show those in light gray background (for not selected) anf gold for selected.
 However, you can select your own colours using the following attributes: `back-color` for not selected stars and `sel-color` for selected.
 
 Other then pre-selecting by stars you can also pre-select by `percent`:
