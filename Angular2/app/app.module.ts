@@ -1,6 +1,7 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { StarComponent, StarItemComponent } from './app.component';
+import { StarComponent } from './stars.component';
+import { StarItemComponent } from './star.component';
 
 @NgModule({
     imports:      [ BrowserModule ],

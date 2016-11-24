@@ -1,7 +1,9 @@
 .idea
 node_modules
-Angular2/app/app.component.js
-Angular2/app/app.component.js.map
+Angular2/app/star.component.js
+Angular2/app/star.component.js.map
+Angular2/app/stars.component.js
+Angular2/app/stars.component.js.map
 Angular2/app/app.module.js
 Angular2/app/app.module.js.map
 Angular2/app/main.js
