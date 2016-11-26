@@ -22,7 +22,7 @@ Other then pre-selecting by stars you can also pre-select by `percent`:
  User will be able to select another rating by hovering mouse over the stars (a click will define the new rating value). However, you can disable this behavior by using the `disabled` attribute, like below:
  
  ```javascript
- <stars stars-selected="3" disabled="true"></stars>
+ <stars stars-selected="3.5" disabled="true"></stars>
  ```
  
- This will show `5` stars with `3` of those selected and any other action over the rating will be disabled.
+ This will show `5` stars with `3.5` of those selected and any other action over the rating will be disabled.
