@@ -43,20 +43,23 @@ export class StarComponent {
     starsSelected: number;
     disabled: boolean;
     el: ElementRef;
+    elDimensions: ClientRect;
 
     constructor(el: ElementRef) {
-        const _getAttribute = (el, attr, def) => el.nativeElement.getAttribute(attr) || def;
+        const nativeEl = el.nativeElement;
+        const getAttr = (nEl: HTMLElement, attr: string, def?: string) :string
+            => nEl.getAttribute(attr) || def;
 
-        // Pass attributes inside
-        this.selColor = _getAttribute(el, 'sel-color', 'gold');
-        this.backColor = _getAttribute(el, 'back-color', 'white');
-        this.starBackColor = _getAttribute(el, 'star-back-color', 'lightgray');
-        this.radius = parseInt(_getAttribute(el, 'radius', '30'), 10);
-        this.items = parseInt(_getAttribute(el, 'items', '5'), 10);
-        this.percent = _getAttribute(el, 'percent', '0') + '%';
-        this.starsSelected = parseFloat(_getAttribute(el, 'stars-selected', 0));
-        this.disabled = !!_getAttribute(el, 'disabled', false);
-        this.type = _getAttribute(el, 'type', 'star');
+        // Pass attributes into app
+        this.selColor = getAttr(nativeEl, 'sel-color', 'gold');
+        this.backColor = getAttr(nativeEl, 'back-color', 'white');
+        this.starBackColor = getAttr(nativeEl, 'star-back-color', 'lightgray');
+        this.radius = parseInt(getAttr(nativeEl, 'radius', '30'), 10);
+        this.items = parseInt(getAttr(nativeEl, 'items', '5'), 10);
+        this.percent = getAttr(nativeEl, 'percent', '0') + '%';
+        this.starsSelected = parseFloat(getAttr(nativeEl, 'stars-selected', '0'));
+        this.disabled = !!getAttr(nativeEl, 'disabled');
+        this.type = getAttr(nativeEl, 'type', 'star');
 
         this.itemsIterable = new Array(this.items);
         this.securedWidth = this.starsSelected ? 100 / this.items * this.starsSelected + '%' : this.percent;
@@ -64,10 +67,11 @@ export class StarComponent {
 
         // initial rating setup
         this.selWidth = this.securedWidth;
+        this.elDimensions = this.el.nativeElement.getBoundingClientRect();
     }
 
     changeRating(e: MouseEvent) {
-        this.selWidth = !this.disabled && e.clientX - this.el.nativeElement.getBoundingClientRect().left + 'px';
+        this.selWidth = !this.disabled && e.clientX - this.elDimensions.left + 'px';
         this.percent = parseInt(this.selWidth, 10) / this.radius * 2 * this.items + '%';
     }
 
