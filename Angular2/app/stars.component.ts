@@ -63,11 +63,11 @@ export class StarComponent {
 
         this.itemsIterable = new Array(this.items);
         this.securedWidth = this.starsSelected ? 100 / this.items * this.starsSelected + '%' : this.percent;
+        this.elDimensions = nativeEl.getBoundingClientRect();
         this.el = el;
 
         // initial rating setup
         this.selWidth = this.securedWidth;
-        this.elDimensions = this.el.nativeElement.getBoundingClientRect();
     }
 
     changeRating(e: MouseEvent) {
