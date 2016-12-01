@@ -38,7 +38,7 @@ export class StarComponent {
     backColor: string;
     starBackColor: string;
     securedWidth: string;
-    selWidth: string;
+    selectedWidth: string;
     percent: string;
     starsSelected: number;
     disabled: boolean;
@@ -67,16 +67,16 @@ export class StarComponent {
         this.el = el;
 
         // initial rating setup
-        this.selWidth = this.securedWidth;
+        this.selectedWidth = this.securedWidth;
     }
 
     changeRating(e: MouseEvent) {
-        this.selWidth = !this.disabled && e.clientX - this.elDimensions.left + 'px';
-        this.percent = parseInt(this.selWidth, 10) / this.radius * 2 * this.items + '%';
+        this.selectedWidth = !this.disabled && e.clientX - this.elDimensions.left + 'px';
+        this.percent = parseInt(this.selectedWidth, 10) / this.radius * 2 * this.items + '%';
     }
 
     leaveRating() {
-        this.selWidth = this.securedWidth;
+        this.selectedWidth = this.securedWidth;
     }
 
     secureNewRating() {
