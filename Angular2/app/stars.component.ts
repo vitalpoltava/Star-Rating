@@ -23,7 +23,7 @@ import {Component, ElementRef} from '@angular/core';
             (mouseleave)="leaveRating()"
             (mousemove)="changeRating($event)">
             <div class="stars-selected" 
-                [ngStyle]="{'width': selWidth, 'background-color': selColor}"></div>
+                [ngStyle]="{'width': selectedWidth, 'background-color': selectedColor}"></div>
             <star-item *ngFor="let i of itemsIterable" [type]="type" [backColor]="backColor" [radius]="radius"></star-item>
         </div>
     `
@@ -34,7 +34,7 @@ export class StarComponent {
     type: string;
     items: number;
     itemsIterable: number[];
-    selColor: string;
+    selectedColor: string;
     backColor: string;
     starBackColor: string;
     securedWidth: string;
@@ -50,7 +50,7 @@ export class StarComponent {
         const getAttr = (nEl: HTMLElement, attr: string, def?: string) :string => nEl.getAttribute(attr) || def;
 
         // Pass attributes into app
-        this.selColor = getAttr(nativeEl, 'sel-color', 'gold');
+        this.selectedColor = getAttr(nativeEl, 'sel-color', 'gold');
         this.backColor = getAttr(nativeEl, 'back-color', 'white');
         this.starBackColor = getAttr(nativeEl, 'star-back-color', 'lightgray');
         this.radius = parseInt(getAttr(nativeEl, 'radius', '30'), 10);
