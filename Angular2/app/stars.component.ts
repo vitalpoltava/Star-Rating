@@ -47,8 +47,7 @@ export class StarComponent {
 
     constructor(el: ElementRef) {
         const nativeEl = el.nativeElement;
-        const getAttr = (nEl: HTMLElement, attr: string, def?: string) :string
-            => nEl.getAttribute(attr) || def;
+        const getAttr = (nEl: HTMLElement, attr: string, def?: string) :string => nEl.getAttribute(attr) || def;
 
         // Pass attributes into app
         this.selColor = getAttr(nativeEl, 'sel-color', 'gold');
