@@ -19,6 +19,29 @@
         // Default graphic items -- stars
     });
 
+    rating.controller("starsPredictedController", function ($scope) {
+        var self = this;
+
+        self.clearRating = clearRating;
+        self.getRating = getRating;
+
+        //self.testRating = 4
+
+        function clearRating() {
+            $scope.ctrlState.selColor = $scope.ctrlState.predictedColor;
+            $scope.rating = $scope.ctrlState.initPercent;
+        }
+
+        function getRating() {
+            if($scope.ctrlState.hasNewRating) {
+                return $scope.ctrlState.prevPercent;
+            } else {
+                return undefined;
+            }
+        }
+
+    });
+
     rating.controller("circlesController", function ($scope) {
         // Circle graphic items function
         $scope.circleDrawer = function (ctx, r) {
@@ -123,7 +146,29 @@
          * @param attrs {Object}
          * @returns {Number}
          */
-        var calculatePercent = function(attrs) {
+        var calculatePercentPredicted = function(attrs) {
+            var percent, stars, selectedStars;
+            if (!attrs) {
+                return 0;
+            } else if (attrs.predictedPercent) {
+                percent = parseInt(attrs.ratingPercent) ? parseInt(attrs.ratingPercent) : 0;
+                return percent > 100 ? 100 : percent;
+            } else if (attrs.predictedStars) {
+                stars = parseInt(attrs.stars || 5);
+                selectedStars = parseFloat(attrs.predictedStars) > stars ? stars : parseFloat(attrs.predictedStars);
+                return (100 / stars) * selectedStars || 0.0;
+            } else {
+                return calculatePercentRating(attrs);
+            }
+        };
+
+        /**
+         * Calculate percent of area to filled with color star
+         *
+         * @param attrs {Object}
+         * @returns {Number}
+         */
+        var calculatePercentRating = function(attrs) {
             var percent, stars, selectedStars;
             if (!attrs) {
                 return 0;
@@ -167,7 +212,8 @@
 
         return {
             createRange: createRange,
-            calculatePercent: calculatePercent,
+            calculatePercentPredicted: calculatePercentPredicted,
+            calculatePercentRating: calculatePercentRating,
             percentFullStars: percentFullStars,
             starsByPercent: starsByPercent
         };
@@ -184,10 +230,12 @@
             scope: {
                 percent: "=outerPercent",
                 starsSelected: "=outerStarSelection",
-                customFigureDrawer: "=?"
+                customFigureDrawer: "=?",
+                predicted: "=?",
+                ctrlState: "=?"
             },
             
-            template: '<div class="stars" ng-mousemove="changeRating($event)" ng-mouseleave="leaveRating()" ng-style="{\'background-color\': emptyBackColor}"><div class="stars-selected" ng-style="{\'width\': percent + \'%\', \'background-color\': selColor}"></div></div>',
+            template: '<div class="stars" ng-mousemove="changeRating($event)" ng-mouseleave="leaveRating()" ng-style="{\'background-color\': emptyBackColor}"><div class="stars-selected" ng-style="{\'width\': percent + \'%\', \'background-color\': ctrlState.selColor}"></div></div>',
             
             link: function($scope, el, attrs) {
                 // Configs
@@ -195,13 +243,27 @@
                 var wrapper = angular.element(el[0].querySelector('.stars'));
                 var filler = angular.element(el[0].querySelector('.stars-selected'));
 
+                $scope.ctrlState = {}
+
                 $scope.howManyStars = starsUtility.createRange( attrs.stars ) || starsUtility.createRange(5);
                 $scope.starRadius = parseInt( attrs.starRadius ) || 20;
-                $scope.percent = $scope.prevPercent = starsUtility.calculatePercent( attrs );
+                $scope.ctrlState.initPercent = $scope.percent = $scope.ctrlState.prevPercent = starsUtility.calculatePercentPredicted( attrs );
                 $scope.backColor = attrs.backColor || 'white';
                 $scope.emptyBackColor = attrs.emptyBackColor || '#d3d3d3';
-                $scope.selColor = attrs.selColor || 'gold';
+                $scope.ctrlState.ratedColor = attrs.selColor || 'gold';
+                $scope.ctrlState.predictedColor = $scope.ctrlState.selColor = attrs.predictedColor || $scope.ctrlState.ratedColor;
+                $scope.predicted = attrs.predictedStars;
+
                 $scope.ratingDefine = attrs.ratingDefine || false;
+                $scope.rateWholeStars = attrs.rateWholeStars || false;
+
+                if(attrs.ratingStars) {
+                   $scope.ctrlState.hasNewRating = true;
+                   $scope.percent = $scope.ctrlState.prevPercent = starsUtility.calculatePercentRating(attrs);
+                   $scope.ctrlState.selColor = $scope.ctrlState.ratedColor;    
+                } else {
+                    $scope.ctrlState.hasNewRating = false;
+                }
 
                 // Allowed to define a new rating?
                 // -------------------------------
@@ -219,15 +281,29 @@
                         var w = el.offsetWidth;
                         var selected = e.clientX - el.getBoundingClientRect().left + 2;
                         var newPercent = $scope.ratingDefine == 'star' ? starsUtility.percentFullStars($scope.howManyStars.length, w, $scope.starRadius*2, selected) : Math.floor((selected * 100) / w);
+
+                        if($scope.rateWholeStars) {
+                            newPercent = Math.ceil(newPercent * $scope.howManyStars.length / 100.0) * 100.0 / $scope.howManyStars.length
+                        }
+
                         $scope.percent = newPercent > 100 ? 100 : newPercent;
+                        $scope.ctrlState.selColor = $scope.ctrlState.ratedColor;
                     };
 
                     $scope.leaveRating = function() {
-                        $scope.percent = $scope.prevPercent;
+                        $scope.percent = $scope.ctrlState.prevPercent;
+
+                        if($scope.ctrlState.hasNewRating) {
+                            $scope.ctrlState.selColor = $scope.ctrlState.ratedColor;    
+                        } else {
+                            $scope.ctrlState.selColor = $scope.ctrlState.predictedColor;
+                        }
                     };
 
                     $scope.secureNewRating = function() {
-                        $scope.prevPercent = $scope.percent;
+                        $scope.ctrlState.hasNewRating = true;
+                        $scope.ctrlState.prevPercent = $scope.percent;
+                        $scope.ctrlState.selColor = $scope.ctrlState.ratedColor;
                     };
                 }
 

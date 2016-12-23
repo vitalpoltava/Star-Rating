@@ -12,6 +12,14 @@ In a file `stars.html` you'll find a working example of using `AngularJS` and `c
 * You can define the color of the 'empty star' with attribute `empty-back-color`, background color of the stars wrapper -- `back-color` and the background color of the selected stars -- `sel-color`;
 * Also you can use a two ways to define how many stars will be selected: by defining a 'fill percent' approach -- `rating-percent` attribute, or with 'stars number' -- `rating-stars` (you can use here float numbers, for example you can select `3.5` stars).
 * Do not like stars? Prefer circles? Provide your own function to draw the rating element you want via `custom-figure-drawer` attribute.
+* Only allow ratings in terms of whole stars -- attribute `rate-whole-stars`
+
+Want to add the distinction between an initial value (a prediction) and a stored value (a rating)?
+* Predicted star value (to be read by controller) -- attribute `predicted`
+* Predicted star default value -- attribute `predicted-stars`
+* Predicted star color -- attribute `predicted-color`
+* Rating star value (optional) -- attribute `rating-stars`
+* Add ability to clear rating and revert to prediction -- attribute `ctrl-state`
 
 Wishing to change the rating live?
 
