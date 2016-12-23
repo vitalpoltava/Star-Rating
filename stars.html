@@ -22,6 +22,17 @@
         <div><span ng-bind="circles"></span>&nbsp;circles</div>
     </div>
 
+     <!-- STARS with predictions -->
+    <div ng-controller="starsPredictedController as starCtrl">
+        <div star-rating stars="5" outer-star-selection="stars" outer-percent="rating" rating-define="percent" predicted="predicted" predicted-stars="3.5" rating-stars="{{starCtrl.testRating}}" star-radius="30" predicted-color="blue" sel-color="gold" back-color="white" rate-whole-stars="true" ctrl-state="ctrlState"></div>
+        <div>Stored Rating: <span ng-bind="starCtrl.getRating()"></span>%</div>
+        <div>Current Rating: <span ng-bind="rating"></span>%</div>
+        <div>Current Stars: <span ng-bind="stars"></span>&nbsp;stars</div>
+        <div>Stored Prediction: <span ng-bind="predicted"></span>&nbsp;stars</div>
+        <button ng-click="starCtrl.clearRating()">Clear Rating</button>
+    </div>
+    <br><br>
+
 </div>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
 <script src="rating.js"></script>
