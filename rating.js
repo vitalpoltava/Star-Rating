@@ -103,21 +103,6 @@
     // @ngInject
     rating.factory('starsUtility', function() {
         /**
-         * Creates an array with index values
-         *
-         * @param n {Number}
-         * @returns {Array}
-         */
-        var createRange = function(n) {
-            var i = 0;
-            var range = new Array(n);
-            while(i < n) {
-                range[i++] = i;
-            }
-            return range;
-        };
-
-        /**
          * Calculate percent of area to filled with color star
          *
          * @param attrs {Object}
@@ -166,7 +151,6 @@
         };
 
         return {
-            createRange: createRange,
             calculatePercent: calculatePercent,
             percentFullStars: percentFullStars,
             starsByPercent: starsByPercent
@@ -191,26 +175,27 @@
             
             link: function($scope, el, attrs) {
                 // Configs
+                var prevPercent;
                 var starEls = [];
                 var wrapper = angular.element(el[0].querySelector('.stars'));
                 var filler = angular.element(el[0].querySelector('.stars-selected'));
+                var howManyStars = parseInt( attrs.stars ) || 5;
+                var ratingDefine = attrs.ratingDefine || false;
 
-                $scope.howManyStars = starsUtility.createRange( attrs.stars ) || starsUtility.createRange(5);
                 $scope.starRadius = parseInt( attrs.starRadius ) || 20;
-                $scope.percent = $scope.prevPercent = starsUtility.calculatePercent( attrs );
+                $scope.percent = prevPercent = starsUtility.calculatePercent( attrs );
                 $scope.backColor = attrs.backColor || 'white';
                 $scope.emptyBackColor = attrs.emptyBackColor || '#d3d3d3';
                 $scope.selColor = attrs.selColor || 'gold';
-                $scope.ratingDefine = attrs.ratingDefine || false;
 
                 // Allowed to define a new rating?
                 // -------------------------------
-                if ($scope.ratingDefine) {
+                if (ratingDefine) {
 
                     // watch percent value to update the view
                     $scope.$watch('percent', function(newValue) {
                         filler.css('width', newValue + '%');
-                        $scope.starsSelected = starsUtility.starsByPercent($scope.howManyStars.length, $scope.percent);
+                        $scope.starsSelected = starsUtility.starsByPercent(howManyStars, $scope.percent);
                     });
 
                     // handle events to change the rating
@@ -218,26 +203,27 @@
                         var el = wrapper[0];
                         var w = el.offsetWidth;
                         var selected = e.clientX - el.getBoundingClientRect().left + 2;
-                        var newPercent = $scope.ratingDefine == 'star' ? starsUtility.percentFullStars($scope.howManyStars.length, w, $scope.starRadius*2, selected) : Math.floor((selected * 100) / w);
+                        var newPercent = ratingDefine == 'star' ? starsUtility.percentFullStars(howManyStars, w, $scope.starRadius*2, selected) : Math.floor((selected * 100) / w);
                         $scope.percent = newPercent > 100 ? 100 : newPercent;
                     };
 
                     $scope.leaveRating = function() {
-                        $scope.percent = $scope.prevPercent;
+                        $scope.percent = prevPercent;
                     };
 
                     $scope.secureNewRating = function() {
-                        $scope.prevPercent = $scope.percent;
+                        prevPercent = $scope.percent;
                     };
                 }
 
                 // add canvas to DOM first
-                $scope.howManyStars.forEach(function() {
+                while (howManyStars > 0) {
                     var star = angular.element('<canvas class="star" ng-click="secureNewRating()" height="{{starRadius*2}}" width="{{starRadius*2}}"></canvas>');
                     $compile(star)($scope);
                     wrapper.append(star);
                     starEls.push(star);
-                });
+                    howManyStars--;
+                }
 
                 // we should wait for next JS 'tick' to show up the stars
                 $timeout(function() {
