@@ -37,8 +37,6 @@
      * Core functionality
      * ------------------
      */
-
-    // @ngInject
     rating.factory('stars', function() {
 
         /**
@@ -100,7 +98,6 @@
         }
     });
 
-    // @ngInject
     rating.factory('starsUtility', function() {
         /**
          * Calculate percent of area to filled with color star
