@@ -1,7 +1,7 @@
 /**
  * Variable Star Rating
  *
- * ver 0.3.5
+ * ver 0.4.0
  *
  * (c) Vitalii Omelkin, 2015, 2016
  * Licensed under the MIT License
@@ -173,8 +173,11 @@
                         'ng-mouseleave="leaveRating()" ' +
                         'ng-style="{\'background-color\': emptyBackColor}">' +
                             '<div class="stars-selected" ' +
-                                'ng-style="{\'width\': percent + \'%\', \'background-color\': selColor}">' +
-                            '</div>' +
+                                'ng-style="{\'width\': percent + \'%\', \'background-color\': selColor}"></div>' +
+                            '<canvas class="star" ng-repeat="i in starsIterable"' +
+                                'ng-click="secureNewRating()" ' +
+                                'height="{{starRadius*2}}" ' +
+                                'width="{{starRadius*2}}"></canvas>' +
                       '</div>',
             
             link: function($scope, el, attrs) {
@@ -191,6 +194,11 @@
                 $scope.backColor = attrs.backColor || 'white';
                 $scope.emptyBackColor = attrs.emptyBackColor || '#d3d3d3';
                 $scope.selColor = attrs.selColor || 'gold';
+                $scope.starsIterable = (function() {
+                    var res = [];
+                    for (var i = 0; i < howManyStars; i++) { res.push(i); }
+                    return res;
+                }());
 
                 // Allowed to define a new rating?
                 // -------------------------------
@@ -220,19 +228,10 @@
                     };
                 }
 
-                // add canvas to DOM first
-                while (howManyStars > 0) {
-                    var star = angular.element('<canvas class="star" ng-click="secureNewRating()" height="{{starRadius*2}}" width="{{starRadius*2}}"></canvas>');
-                    $compile(star)($scope);
-                    wrapper.append(star);
-                    starEls.push(star);
-                    howManyStars--;
-                }
-
                 // we should wait for next JS 'tick' to show up the stars
                 $timeout(function() {
-                    starEls.forEach(function(el) {
-                        stars.drawRatingElement(el[0].getContext("2d"), $scope.starRadius, $scope.backColor, $scope.customFigureDrawer);
+                    wrapper[0].querySelectorAll('.star').forEach(function(starEl) {
+                        stars.drawRatingElement(starEl.getContext("2d"), $scope.starRadius, $scope.backColor, $scope.customFigureDrawer);
                     });
                     wrapper.css('visibility', 'visible'); // this to avoid to show partly rendered layout
                 });
