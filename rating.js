@@ -180,12 +180,12 @@
                                 'width="{{starRadius*2}}"></canvas>' +
                       '</div>',
             
-            link: function($scope, el, attrs) {
+            link: function($scope, root, attrs) {
                 // Configs
                 var prevPercent;
                 var starEls = [];
-                var wrapper = angular.element(el[0].querySelector('.stars'));
-                var filler = angular.element(el[0].querySelector('.stars-selected'));
+                var wrapper = angular.element(root[0].querySelector('.stars'));
+                var filler = angular.element(root[0].querySelector('.stars-selected'));
                 var howManyStars = parseInt( attrs.stars ) || 5;
                 var ratingDefine = attrs.ratingDefine || false;
 
