@@ -183,7 +183,6 @@
             link: function($scope, root, attrs) {
                 // Configs
                 var prevPercent;
-                var starEls = [];
                 var wrapper = angular.element(root[0].querySelector('.stars'));
                 var filler = angular.element(root[0].querySelector('.stars-selected'));
                 var howManyStars = parseInt( attrs.stars ) || 5;
