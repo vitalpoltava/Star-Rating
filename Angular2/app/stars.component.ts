@@ -1,4 +1,4 @@
-import {Component, ElementRef} from '@angular/core';
+import {Component, ElementRef, Input, OnInit} from '@angular/core';
 
 @Component({
     selector: 'stars',
@@ -29,41 +29,31 @@ import {Component, ElementRef} from '@angular/core';
     `
 })
 
-export class StarComponent {
-    radius: number;
-    type: string;
-    items: number;
-    itemsIterable: number[];
-    selectedColor: string;
-    backColor: string;
-    starBackColor: string;
+export class StarComponent implements OnInit{
+    @Input('radius') radius: number = 30;
+    @Input('type') type: string = 'star';
+    @Input('items') items: number = 5;
+    @Input('sel-color') selectedColor: string = '#e6a719';
+    @Input('back-color') backColor: string = 'white';
+    @Input('star-back-color') starBackColor: string = 'lightgray';
+    @Input('percent') percent: string = '0';
+    @Input('stars-selected') starsSelected: number = 0;
+    @Input('disabled') disabled: boolean = false;
+        
     securedWidth: string;
     selectedWidth: string;
-    percent: string;
-    starsSelected: number;
-    disabled: boolean;
-    el: ElementRef;
-    elDimensions: ClientRect;
-
-    constructor(el: ElementRef) {
-        const nativeEl = el.nativeElement;
-        const getAttr = (nEl: HTMLElement, attr: string, def?: string) :string => nEl.getAttribute(attr) || def;
-
+    itemsIterable: number[];
+   
+    constructor() {
+        
+    }
+    
+    ngOnInit() {
         // Pass attributes into app
-        this.selectedColor = getAttr(nativeEl, 'sel-color', 'gold');
-        this.backColor = getAttr(nativeEl, 'back-color', 'white');
-        this.starBackColor = getAttr(nativeEl, 'star-back-color', 'lightgray');
-        this.radius = parseInt(getAttr(nativeEl, 'radius', '30'), 10);
-        this.items = parseInt(getAttr(nativeEl, 'items', '5'), 10);
-        this.percent = getAttr(nativeEl, 'percent', '0') + '%';
-        this.starsSelected = parseFloat(getAttr(nativeEl, 'stars-selected', '0'));
-        this.disabled = !!getAttr(nativeEl, 'disabled');
-        this.type = getAttr(nativeEl, 'type', 'star');
+        this.percent += '%';
 
         this.itemsIterable = new Array(this.items);
         this.securedWidth = this.starsSelected ? 100 / this.items * this.starsSelected + '%' : this.percent;
-        this.elDimensions = nativeEl.getBoundingClientRect();
-        this.el = el;
 
         // initial rating setup
         this.selectedWidth = this.securedWidth;
