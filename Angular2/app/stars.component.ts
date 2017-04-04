@@ -1,4 +1,4 @@
-import {Component, ElementRef} from '@angular/core';
+import {Component, ElementRef, Input, OnInit} from '@angular/core';
 
 @Component({
     selector: 'stars',
@@ -29,41 +29,46 @@ import {Component, ElementRef} from '@angular/core';
     `
 })
 
-export class StarComponent {
-    radius: number;
-    type: string;
-    items: number;
-    itemsIterable: number[];
-    selectedColor: string;
-    backColor: string;
-    starBackColor: string;
+export class StarComponent implements OnInit {
+    @Input('radius') radius: number;
+    @Input('type') type: string;
+    @Input('items') items: number;
+    @Input('sel-color') selectedColor: string;
+    @Input('back-color') backColor: string;
+    @Input('star-back-color') starBackColor: string;
+    @Input('percent') percent: string;
+    @Input('stars-selected') starsSelected: number;
+    @Input('disabled') disabled: boolean;
+
     securedWidth: string;
     selectedWidth: string;
-    percent: string;
-    starsSelected: number;
-    disabled: boolean;
-    el: ElementRef;
+    itemsIterable: number[];
     elDimensions: ClientRect;
+    el: ElementRef;
+    nativeEl: HTMLElement;
 
     constructor(el: ElementRef) {
-        const nativeEl = el.nativeElement;
+        this.nativeEl = el.nativeElement;
+        this.el = el;
+    }
+
+    ngOnInit() {
         const getAttr = (nEl: HTMLElement, attr: string, def?: string) :string => nEl.getAttribute(attr) || def;
 
         // Pass attributes into app
-        this.selectedColor = getAttr(nativeEl, 'sel-color', 'gold');
-        this.backColor = getAttr(nativeEl, 'back-color', 'white');
-        this.starBackColor = getAttr(nativeEl, 'star-back-color', 'lightgray');
-        this.radius = parseInt(getAttr(nativeEl, 'radius', '30'), 10);
-        this.items = parseInt(getAttr(nativeEl, 'items', '5'), 10);
-        this.percent = getAttr(nativeEl, 'percent', '0') + '%';
-        this.starsSelected = parseFloat(getAttr(nativeEl, 'stars-selected', '0'));
-        this.disabled = !!getAttr(nativeEl, 'disabled');
-        this.type = getAttr(nativeEl, 'type', 'star');
+        this.selectedColor = this.selectedColor || getAttr(this.nativeEl, 'sel-color', 'gold');
+        this.backColor = this.backColor || getAttr(this.nativeEl, 'back-color', 'white');
+        this.starBackColor = this.starBackColor || getAttr(this.nativeEl, 'star-back-color', 'lightgray');
+        this.radius = this.radius || parseInt(getAttr(this.nativeEl, 'radius', '30'), 10);
+        this.items = this.items || parseInt(getAttr(this.nativeEl, 'items', '5'), 10);
+        this.percent = this.percent || getAttr(this.nativeEl, 'percent', '0') + '%';
+        this.starsSelected = this.starsSelected || parseFloat(getAttr(this.nativeEl, 'stars-selected', '0'));
+        this.disabled = this.disabled || !!getAttr(this.nativeEl, 'disabled');
+        this.type = this.type || getAttr(this.nativeEl, 'type', 'star');
 
         this.itemsIterable = new Array(this.items);
         this.securedWidth = this.starsSelected ? 100 / this.items * this.starsSelected + '%' : this.percent;
-        this.elDimensions = nativeEl.getBoundingClientRect();
-        this.el = el;
+        this.elDimensions = this.nativeEl.getBoundingClientRect();
 
         // initial rating setup
         this.selectedWidth = this.securedWidth;
