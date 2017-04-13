@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, Input} from '@angular/core';
 
 @Component({
     selector: 'stars',
@@ -29,7 +29,7 @@ import {Component, ElementRef, Input, OnInit} from '@angular/core';
     `
 })
 
-export class StarComponent implements OnInit {
+export class StarComponent {
     @Input('radius') radius: number;
     @Input('type') type: string;
     @Input('items') items: number;

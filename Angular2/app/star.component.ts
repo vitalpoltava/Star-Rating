@@ -1,4 +1,4 @@
-import {Component, ElementRef,Input} from '@angular/core';
+import {Component, ElementRef, Input} from '@angular/core';
 
 @Component({
     selector: 'star-item',
@@ -19,6 +19,7 @@ export class StarItemComponent {
     @Input() radius: number;
     @Input() backColor: string;
     @Input() type: string;
+
     root: ElementRef;    
 
     constructor(myElement: ElementRef) {
