@@ -1,8 +1,7 @@
-import {Component, ElementRef} from '@angular/core';
+import {Component, ElementRef,Input} from '@angular/core';
 
 @Component({
     selector: 'star-item',
-    inputs: ['radius', 'type', 'backColor'],
     styles: [`
         canvas.star {
             float: left;
@@ -17,10 +16,10 @@ import {Component, ElementRef} from '@angular/core';
 })
 
 export class StarItemComponent {
-    radius: number;
-    root: ElementRef;
-    backColor: string;
-    type: string;
+    @Input() radius: number;
+    @Input() backColor: string;
+    @Input() type: string;
+    root: ElementRef;    
 
     constructor(myElement: ElementRef) {
         this.root = myElement;
