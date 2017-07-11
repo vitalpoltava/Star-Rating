@@ -1,4 +1,4 @@
-![Logo](https://angular.io/resources/images/logos/standard/logo-nav.png)
+![Logo](https://angular.io/assets/images/logos/angular/angular.png)
 
 The **Angular2** version of the **Star Rating** application.
 
