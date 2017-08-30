@@ -19,7 +19,7 @@
         // Default graphic items -- stars
     });
 
-    rating.controller("circlesController", function ($scope) {
+    rating.controller("circlesController", ['$scope', function ($scope) {
         // Circle graphic items function
         $scope.circleDrawer = function (ctx, r) {
             if (!ctx) throw Error('No Canvas context found!');
@@ -30,7 +30,7 @@
             ctx.fill();
             ctx.restore();
         }
-    });
+    }]);
 
 
     /**
@@ -89,7 +89,7 @@
             } else {
                 _star(ctx, r); // draw star as a default rating item
             }
-            
+
         }
 
         // Return API
@@ -158,16 +158,16 @@
     //        DIRECTIVE
     // ------------------------
     // @ngInject
-    rating.directive('starRating', function($compile, $timeout, stars, starsUtility) {
+    rating.directive('starRating', ['$compile', '$timeout', 'stars', 'starsUtility', function($compile, $timeout, stars, starsUtility) {
         return {
             restrict: 'A',
-            
+
             scope: {
                 percent: "=outerPercent",
                 starsSelected: "=outerStarSelection",
                 customFigureDrawer: "=?"
             },
-            
+
             template: '<div class="stars" ' +
                         'ng-mousemove="changeRating($event)" ' +
                         'ng-mouseleave="leaveRating()" ' +
@@ -179,7 +179,7 @@
                                 'height="{{starRadius*2}}" ' +
                                 'width="{{starRadius*2}}"></canvas>' +
                       '</div>',
-            
+
             link: function($scope, root, attrs) {
                 // Configs
                 var prevPercent;
@@ -237,5 +237,5 @@
 
             }
         };
-    });
+    }]);
 }());
