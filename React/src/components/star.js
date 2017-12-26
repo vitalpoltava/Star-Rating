@@ -4,29 +4,34 @@ import figures from '../helpers/figures';
 import helpers from '../helpers/helpers';
 
 /**
- * Component
+ * @name Star
+ * @description
+ * Component to display single rating item (star by default)
+ *
  */
 class Star extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.backColor = props.backColor;
+    this.type = props.type;
+    this.radius = props.radius;
+  }
 
   componentDidMount() {
-    const backColor = this.props.backColor;
-    const type = this.props.type || 'star';
-    const radius = this.props.radius;
     const ctx = this.refElement.getContext("2d");
 
-    helpers.drawRect(ctx, radius * 2, backColor);
-    helpers.drawItem(figures[type] || figures.star,  ctx, radius);
+    helpers.drawRect(ctx, this.radius * 2, this.backColor);
+    helpers.drawItem(figures[this.type] || figures.star,  ctx, this.radius);
   }
 
   render() {
-    const radius = this.props.radius;
-
     return (
       <canvas
         className="star"
-        ref={ (el) => { this.refElement = el; }}
-        height={ radius*2 }
-        width={ radius*2 }></canvas>
+        ref={(el) => {this.refElement = el;}}
+        height={this.radius*2}
+        width={this.radius*2 }/>
     )
   }
 }

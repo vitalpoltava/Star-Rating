@@ -2,6 +2,12 @@ import React from 'react';
 import Star from './star';
 import '../styles/stars.css'
 
+/**
+ * @name Stars
+ * @description
+ * Component to display all rating items (stars by default)
+ *
+ */
 class Stars extends React.Component {
   constructor(props) {
     super(props);
@@ -17,7 +23,7 @@ class Stars extends React.Component {
     this.type = props['type'] || 'star';
     this.securedWidth = this.starsSelected ? 100 / this.items * this.starsSelected + '%' : this.percent;
 
-    // initial rating setup
+    // initial rating state setup
     this.state = {
       selectedWidth: this.securedWidth,
     }
@@ -46,18 +52,18 @@ class Stars extends React.Component {
 
   render() {
     const itemsIterative = Array.from(Array(this.items).keys());
-    const stylesWrapper = {backgroundColor: this.starBackColor};
-    const stylesSelected = {width: this.state.selectedWidth, backgroundColor: this.selectedColor};
+    const styleWrapper = {backgroundColor: this.starBackColor};
+    const styleSelected = {width: this.state.selectedWidth, backgroundColor: this.selectedColor};
 
     return (
       <div
         className="stars"
-        style={stylesWrapper}
+        style={styleWrapper}
         onMouseMove={this.changeRating}
         onMouseLeave={this.leaveRating}
         onClick={this.secureNewRating}
         ref={wrapper => this.nativeEl = wrapper}>
-        <div className="stars-selected" style={stylesSelected}/>
+        <div className="stars-selected" style={styleSelected}/>
         {itemsIterative.map(item =>
           <Star
             key={item}
