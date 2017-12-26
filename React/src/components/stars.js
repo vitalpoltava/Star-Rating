@@ -6,15 +6,15 @@ class Stars extends React.Component {
   constructor(props) {
     super(props);
 
-    this.selectedColor = this.props['sel-color'] || 'gold';
-    this.backColor = this.props['back-color'] || 'white';
-    this.starBackColor = this.props['item-back-color'] || 'lightgray';
-    this.radius = parseInt(this.props['radius'], 10) || 30;
-    this.items = parseInt(this.props['items'], 10) || 5;
-    this.percent = (this.props['percent'] || '0') + '%';
-    this.starsSelected = parseFloat(this.props['items-selected']) || 0;
-    this.disabled = !!this.props['disabled'];
-    this.type = this.props['type'] || 'star';
+    this.selectedColor = props['sel-color'] || 'gold';
+    this.backColor = props['back-color'] || 'white';
+    this.starBackColor = props['item-back-color'] || 'lightgray';
+    this.radius = parseInt(props['radius'], 10) || 30;
+    this.items = parseInt(props['items'], 10) || 5;
+    this.percent = (props['percent'] || '0') + '%';
+    this.starsSelected = parseFloat(props['items-selected']) || 0;
+    this.disabled = !!props['disabled'];
+    this.type = props['type'] || 'star';
     this.securedWidth = this.starsSelected ? 100 / this.items * this.starsSelected + '%' : this.percent;
 
     // initial rating setup
