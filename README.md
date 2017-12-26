@@ -1,3 +1,4 @@
+**UPD2:** **ReactJS** star rating app added.
 **UPD:** **Angular2** star rating app added.
 
 Need to show a Stars (or other graphic items) rating with floating numbers (like to show `2.5` stars or `3.75` circles)?
