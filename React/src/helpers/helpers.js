@@ -1,6 +1,6 @@
 const Helpers = {
   // Helpers: Draw main canvas area
-  drawRect (ctx, dim, backColor) {
+  drawRect(ctx, dim, backColor) {
     if (!ctx) throw Error('No Canvas context found!');
     ctx.save();
     ctx.fillStyle = backColor;

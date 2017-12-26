@@ -29,6 +29,8 @@ const Figures = {
     ctx.fill();
     ctx.restore();
   },
+
+  // Add your own rating figure here...
 };
 
 export default Figures;
