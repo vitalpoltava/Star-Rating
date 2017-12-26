@@ -43,9 +43,9 @@ class Stars extends React.Component {
     }
   };
 
-  changeRating = (e) => {
+  changeRating = event => {
     if (!this.disabled) {
-      this.setState({selectedWidth: e.clientX - this.elDimensions.left + 'px'});
+      this.setState({selectedWidth: event.clientX - this.elDimensions.left + 'px'});
       this.percent = parseInt(this.state.selectedWidth, 10) / this.radius * 2 * this.items + '%';
     }
   };
