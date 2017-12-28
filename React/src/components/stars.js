@@ -17,15 +17,19 @@ class Stars extends React.Component {
     this.starBackColor = props['item-back-color'] || 'lightgray';
     this.radius = parseInt(props['radius'], 10) || 30;
     this.items = parseInt(props['items'], 10) || 5;
-    this.percent = (props['percent'] || '0') + '%';
+    this.percent = parseInt(props['percent'], 10) || 0;
     this.starsSelected = parseFloat(props['items-selected']) || 0;
     this.disabled = !!props['disabled'];
     this.type = props['type'] || 'star';
-    this.securedWidth = this.starsSelected ? 100 / this.items * this.starsSelected + '%' : this.percent;
+    this.exposeStarsState = props['exposeStarsState'] || (() => {});
+
+    this.securedWidth = this.starsSelected ? 100 / this.items * this.starsSelected + '%' : this.percent + '%';
 
     // initial rating state setup
     this.state = {
       selectedWidth: this.securedWidth,
+      percent: this.percent,
+      starsSelected: this.starsSelected,
     }
   }
 
@@ -33,20 +37,38 @@ class Stars extends React.Component {
     this.elDimensions = this.nativeEl.getBoundingClientRect();
   }
 
+  componentDidUpdate() {
+    // Here we expose component's state outside
+    this.exposeStarsState(this.state);
+  };
+
   leaveRating = () => {
-    this.setState({selectedWidth: this.securedWidth});
+    this.percent = parseInt(this.securedWidth, 10);
+    this.starsSelected = this.percent / (100 / this.items);
+
+    this.setState({
+      selectedWidth: this.securedWidth,
+      percent: this.percent,
+      starsSelected:this.starsSelected,
+    });
   };
 
   secureNewRating = () => {
     if (!this.disabled) {
-      this.securedWidth = this.percent;
+      this.securedWidth = this.percent + '%';
     }
   };
 
   changeRating = event => {
     if (!this.disabled) {
-      this.setState({selectedWidth: event.clientX - this.elDimensions.left + 'px'});
-      this.percent = parseInt(this.state.selectedWidth, 10) / this.radius * 2 * this.items + '%';
+      this.percent = parseInt(this.state.selectedWidth, 10) / this.radius * 2 * this.items;
+      this.starsSelected = this.percent / (100 / this.items);
+
+      this.setState({
+        selectedWidth: event.clientX - this.elDimensions.left + 'px',
+        percent: this.percent,
+        starsSelected:this.starsSelected,
+      });
     }
   };
 

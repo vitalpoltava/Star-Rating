@@ -29,9 +29,7 @@ class Star extends React.Component {
     return (
       <canvas
         className="star"
-        ref={el => {
-          this.refElement = el;
-        }}
+        ref={el => {this.refElement = el}}
         height={this.radius * 2}
         width={this.radius * 2}/>
     )
