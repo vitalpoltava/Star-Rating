@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/star.css';
 import figures from '../helpers/figures';
-import helpers from '../helpers/helpers';
+import canvasTools from '../helpers/tools';
 
 /**
  * @name Star
@@ -21,8 +21,8 @@ class Star extends React.Component {
   componentDidMount() {
     const ctx = this.refElement.getContext("2d");
 
-    helpers.drawRect(ctx, this.radius * 2, this.backColor);
-    helpers.drawItem(figures[this.type] || figures.star, ctx, this.radius);
+    canvasTools.drawRect(ctx, this.radius * 2, this.backColor);
+    canvasTools.drawItem(figures[this.type] || figures.star, ctx, this.radius);
   }
 
   render() {

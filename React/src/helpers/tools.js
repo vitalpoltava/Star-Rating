@@ -1,4 +1,4 @@
-const Helpers = {
+const canvasTools = {
   // Helpers: Draw main canvas area
   drawRect(ctx, dim, backColor) {
     if (!ctx) throw Error('No Canvas context found!');
@@ -14,4 +14,4 @@ const Helpers = {
   }
 };
 
-export default Helpers;
+export default canvasTools;
